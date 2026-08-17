@@ -23,12 +23,15 @@
       <rect class="rc-note-plate" x="9.375" y="9.375" width="45.25" height="45.25" rx="6"/>
       <rect class="rc-note-inner" x="13.375" y="13.375" width="37.25" height="37.25" rx="4"/>
     </g>
-    \x3C!-- 音符は 20x20 で描いてある図形を中央へ。ひし形に内接する正方形は約26pxぶん -->
-    <g class="rc-note-glyph" transform="translate(32 32) scale(1.5) translate(-10 -10)">
-      <ellipse cx="7.7" cy="14.5" rx="3.8" ry="2.9" transform="rotate(-20 7.7 14.5)"/>
-      <path d="M10.6 3.9L12.3 3.2L12.3 14.6L10.6 14.6Z"/>
-      <path d="M12.3 3.4C14.9 4.3 16.8 5.9 16.8 8.3C16.8 9.8 16.1 11 14.9 11.9C15.4 10.6 15.2 9.4 14.4 8.4C13.8 7.6 13.1 7.1 12.3 6.7Z"/>
-    </g>
+    \x3C!-- 音符は 20x20 で描いてある図形を中央へ。ひし形に内接する正方形は約26pxぶん。
+         符頭・符幹・旗を**1つの path の3つのサブパス**にしてあるのが要点:
+         別々の要素にすると半透明の塗りが要素ごとに合成され、符頭と符幹が重なる所だけ
+         色が濃く沈む。1つの path なら重なりも込みで**塗りは1回**なので均一になる -->
+    <path class="rc-note-glyph" fill-rule="nonzero"
+      transform="translate(32 32) scale(1.5) translate(-10 -10)"
+      d="M4.129 15.8A3.8 2.9 -20 1 1 11.271 13.2A3.8 2.9 -20 1 1 4.129 15.8Z
+         M10.6 3.9L12.3 3.2L12.3 14.6L10.6 14.6Z
+         M12.3 3.4C14.9 4.3 16.8 5.9 16.8 8.3C16.8 9.8 16.1 11 14.9 11.9C15.4 10.6 15.2 9.4 14.4 8.4C13.8 7.6 13.1 7.1 12.3 6.7Z"/>
   </svg>
 `,fi="設定変更時はOverlayPluginのクリックスルーを一時解除してください",na="URL指定",je="URLパラメータの指定が優先されています(設定画面からは変更できません)",Si="判定SEに対応したジョブがありません",mi="このジョブに対象スキルはありません",pi="このジョブに対象ステータスはありません",yi="対象のリキャストはありません",gi="「判定SE」でOFFにした種類は、ここでONにしても鳴りません";function vi(){const t=document.createElement("div");t.className="rc-se-head";const e=document.createElement("span");e.className="rc-se-switches";for(const s of It){const a=document.createElement("span");a.className="rc-se-cell",a.textContent=Vr[s],a.title=Xe[s],e.append(a)}return t.append(e),t}function hi(t,e){return t.find(s=>s.id===e)?.desc??""}function Ye(t){const e=document.createElement("div");return e.className="rc-settings-empty",e.textContent=t,e}function es(t){const e=document.createElement("div");return e.className="rc-settings-section",e.textContent=t,e}class bi{constructor(e,s,a={}){this.store=s,this.categories=a.categories??ii;const r=a.title??"設定";this.jobEntries=a.jobEntries??[],this.onPreviewSound=a.onPreviewSound,this.root=document.createElement("div"),this.root.className="rc-settings",this.root.dataset.open="0",this.root.dataset.depth="0";const c=a.launcher??"gear";this.root.dataset.launcher=c,this.root.innerHTML=`
       <button class="rc-gear" type="button" title="設定" aria-label="設定">${c==="note"?ui:di}</button>
